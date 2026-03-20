@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ঈদ মোবারক - আসিফ ইকবাল</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@400;600;800&family=Hind+Siliguri:wght@500;700&display=swap');
+        @import url('https://cdn.jsdelivr.net/gh/infoaiqbal/Rongdhonu@latest/style.css');
+        @import url('https://cdn.jsdelivr.net/gh/infoaiqbal/Kothakoli@latest/style.css');
+        @import url('https://cdn.jsdelivr.net/gh/infoaiqbal/Akibuki@latest/style.css');
+        @import url('https://cdn.jsdelivr.net/gh/infoaiqbal/Kalpurush@latest/style.css');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: radial-gradient(circle at bottom, #1b2735 0%, #080a0f 100%);
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Anek Bangla', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #fireworks-canvas, #stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: moveStars var(--duration) linear infinite alternate;
+        }
+
+        @keyframes moveStars {
+            from { transform: translate(0, 0); }
+            to { transform: translate(var(--moveX), var(--moveY)); }
+        }
+
+        .eid-card {
+            background: rgba(25, 35, 45, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 20px;
+            padding: 45px 20px;
+            width: 90%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            position: relative;
+            z-index: 10;
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        .moon {
+            position: absolute;
+            top: -40px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: -12px 12px 0 0 #f5db73;
+            z-index: 11;
+            transform: rotate(-15deg);
+            filter: drop-shadow(0 0 10px rgba(245, 219, 115, 0.6));
+            animation: floatMoon 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes floatMoon {
+            from { transform: translateY(0px) rotate(-15deg); }
+            to { transform: translateY(10px) rotate(-15deg); }
+        }
+
+        @keyframes floatCard {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-family: 'Kothakoli', serif;
+            color: #f5db73;
+            font-size: 40px;
+            margin-bottom: 15px;
+            font-weight: normal;
+            text-shadow: 0 0 10px rgba(245, 219, 115, 0.4);
+        }
+
+        .scroll-wrapper {
+            background: rgba(245, 219, 115, 0.08);
+            border-top: 1px dashed #f5db73;
+            border-bottom: 1px dashed #f5db73;
+            padding: 10px 0;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .scroll-text {
+            display: inline-block;
+            white-space: nowrap;
+            color: #e0e0e0;
+            font-family: 'Akibuki', serif;
+            font-size: 18px;
+            animation: scrollLeft 18s linear infinite;
+        }
+
+        @keyframes scrollLeft {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* বাটনের জন্য হিন্দ শিলিগুড়ি ফন্ট */
+        .magic-btn {
+            background: linear-gradient(45deg, #d4af37, #f5db73);
+            color: #080a0f;
+            font-family: 'Hind Siliguri', sans-serif;
+            font-size: 18px;
+            font-weight: 700;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 15px rgba(245, 219, 115, 0.3);
+            transition: 0.3s;
+        }
+
+        #secret-message {
+            margin-top: 20px;
+            font-family: 'Rongdhonu', serif;
+            font-size: 20px;
+            color: #00ffcc;
+            line-height: 1.4;
+            text-shadow: 0 0 5px rgba(0, 255, 204, 0.4);
+        }
+
+        #sender-name {
+            margin-top: 15px;
+            font-family: 'Rongdhonu', serif;
+            color: #f5db73;
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+        }
+
+        .ps-note {
+            margin-top: 20px;
+            font-family: 'Kalpurush', serif;
+            font-size: 11px;
+            color: #ffffff;
+            opacity: 0.35;
+            font-weight: normal;
+            letter-spacing: 0.4px;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fireworks-canvas"></canvas>
+    <div id="stars-container"></div>
+
+    <div class="eid-card">
+        <div class="moon"></div>
+        <h1>ঈদ মোবারক</h1>
+        
+        <div class="scroll-wrapper">
+            <div class="scroll-text">
+                ✨ রহমত ও নাজাতের বার্তা নিয়ে আসা ঈদ আপনার জীবনে বয়ে আনুক অনাবিল শান্তি... ✨
+            </div>
+        </div>
+
+        <button class="magic-btn" onclick="startCelebration()">উপহার খুলুন 🎁</button>
+
+        <div id="secret-message"></div>
+        <div id="sender-name">
+            — আসিফ ইকবাল
+            <div class="ps-note">বিঃদ্রঃ ১০০ টাকার কম সালামি দিয়ে নিজেকে গরিব প্রমাণিত করবেন না।</div>
+        </div>
+    </div>
+
+    <script>
+        const starContainer = document.getElementById('stars-container');
+        for (let i = 0; i < 60; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 2 + 'px';
+            star.style.width = size; star.style.height = size;
+            star.style.top = Math.random() * 100 + '%';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.setProperty('--moveX', (Math.random() * 30 - 15) + 'px');
+            star.style.setProperty('--moveY', (Math.random() * 30 - 15) + 'px');
+            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
+            starContainer.appendChild(star);
+        }
+
+        const canvas = document.getElementById('fireworks-canvas');
+        const ctx = canvas.getContext('2d');
+        let fireworkArray = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y, color, velocityX, velocityY) {
+                this.x = x; this.y = y; this.color = color;
+                this.velocityX = velocityX; this.velocityY = velocityY;
+                this.alpha = 1; this.friction = 0.96; this.gravity = 0.08;
+            }
+            draw() {
+                ctx.save(); ctx.globalAlpha = this.alpha;
+                ctx.beginPath(); ctx.arc(this.x, this.y, 1.5, 0, Math.PI * 2);
+                ctx.fillStyle = this.color; ctx.fill(); ctx.restore();
+            }
+            update() {
+                this.velocityX *= this.friction; this.velocityY *= this.friction;
+                this.velocityY += this.gravity; this.x += this.velocityX;
+                this.y += this.velocityY; this.alpha -= 0.015;
+            }
+        }
+
+        function createExplosion(x, y) {
+            const count = 30;
+            const color = `hsl(${Math.random() * 360}, 100%, 65%)`;
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 / count) * i;
+                const speed = Math.random() * 4 + 2;
+                fireworkArray.push(new Particle(x, y, color, Math.cos(angle) * speed, Math.sin(angle) * speed));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            fireworkArray.forEach((p, index) => {
+                if (p.alpha > 0) { p.update(); p.draw(); }
+                else { fireworkArray.splice(index, 1); }
+            });
+        }
+
+        function startCelebration() {
+            const btn = document.querySelector('.magic-btn');
+            const messageBox = document.getElementById('secret-message');
+            const nameBox = document.getElementById('sender-name');
+            const text = "🌙 তাকাব্বালাল্লাহু মিন্না ওয়া মিনকুম।\n\nঈদের চাঁদ আকাশে,\nসালামি দিন বিকাশে।\n\n০১৭৪৭৫৫৪৮৭৪\nবিকাশ, নগদ";
+            
+            btn.style.display = 'none';
+            messageBox.innerHTML = '';
+
+            animate();
+            setInterval(() => {
+                const x = Math.random() * canvas.width;
+                const y = Math.random() * (canvas.height * 0.5);
+                createExplosion(x, y);
+            }, 700);
+
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    messageBox.innerHTML += (text.charAt(i) === '\n') ? '<br>' : text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 50);
+                } else {
+                    nameBox.style.opacity = "1";
+                }
+            }
+            typeWriter();
+        }
+    </script>
+</body>
+</html>
